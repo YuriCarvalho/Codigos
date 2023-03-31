@@ -88,6 +88,34 @@ class Grafo:
                     q.append(node) 
         return aux
 
+    def bcu(self,s,t): 
+        node = Node(s)
+        node.pai = Node(-1)       
+        
+        #Vertices que precisam ser explorados
+        q=[node]
+         #Vertices que foram descobertos
+        d=[]
+        
+        while len(q) != 0:
+            aux = q.pop(0)
+
+            # Olha se chegou no objetivo          
+            if(aux.id) == t:
+                return aux
+            #Olha se o vértice ja foi descoberto
+            if aux.id not in d:
+                d.append(aux.id)
+            
+            # Expansão de vizinhos            
+            for i in range(self.n):                
+                if(self.matriz[aux.id][i] == 1 and i != aux.pai.id):
+                    node = Node(i)
+                    node.pai = aux
+                    q.append(node) 
+        return aux
+
+
 g = Grafo(10,False)
 
 g.printMatriz()
@@ -114,6 +142,14 @@ print("\n")
 
 objetivo = g.bp(0, 9)
 print('Busca em profundidade')
+while(objetivo.id != -1):
+    print(objetivo.id, end=" ")
+    objetivo = objetivo.pai
+
+print("\n")
+
+objetivo = g.bcu(0, 9)
+print('Busca de Custo Uniforme')
 while(objetivo.id != -1):
     print(objetivo.id, end=" ")
     objetivo = objetivo.pai
